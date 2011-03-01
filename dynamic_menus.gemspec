@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Sandro Duarte"]
   s.email       = ["sandrods@gmail.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{generate tree-based menus}
+  s.description = %q{generate tree-based menus}
 
   s.rubyforge_project = "dynamic_menus"
 
