@@ -29,7 +29,7 @@ module DynamicMenus
       ret = ''
       root.children do |a|
         active = (!menu.is_root? && (a==menu || menu.parentage.include?(a))) ? "class='active'" : ''
-        link = a.has_link? ? a.link : a.children.first.link
+        link = a.has_link? ? a.link : (a.children.first.has_link? ? a.children.first : 'root_path')
         lt = link_to(a.title, Rails.application.routes.url_helpers.send(link, :nd => a.name ))
         ret << "<li #{active}>#{lt}</li>\n"
       end
@@ -65,7 +65,8 @@ module DynamicMenus
         else
           opt = {:class => 'last'} if n.name == (last && last.name)
         end
-        link = n.has_link? ? n.link : n.children.first.link
+
+        link = n.has_link? ? n.link : (n.children.first.has_link? ? n.children.first : 'root_path')
         link_to n.title, Rails.application.routes.url_helpers.send(link, :nd => n.name), opt
       end
 
