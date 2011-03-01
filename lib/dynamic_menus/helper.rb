@@ -29,8 +29,7 @@ module DynamicMenus
       ret = ''
       root.children do |a|
         active = (!menu.is_root? && (a==menu || menu.parentage.include?(a))) ? "class='active'" : ''
-        link = a.has_link? ? a.link : (a.children.first.has_link? ? a.children.first : 'root_path')
-        lt = link_to(a.title, Rails.application.routes.url_helpers.send(link, :nd => a.name ))
+        lt = link_to(a.title, monta_link(a))
         ret << "<li #{active}>#{lt}</li>\n"
       end
       ret
@@ -65,9 +64,7 @@ module DynamicMenus
         else
           opt = {:class => 'last'} if n.name == (last && last.name)
         end
-
-        link = n.has_link? ? n.link : (n.children.first.has_link? ? n.children.first : 'root_path')
-        link_to n.title, Rails.application.routes.url_helpers.send(link, :nd => n.name), opt
+        link_to n.title, monta_link(n), opt
       end
 
       if menu.aba?
@@ -82,5 +79,21 @@ module DynamicMenus
       #nodo.permissoes.empty? || session[:ticket].permissao?('ADMIN') || nodo.permissoes.map{|i| i.id}.include?(session[:ticket].setor_id)
     end
 
+    def monta_link(nodo)
+      link = if nodo.has_link? 
+        nodo.link
+      elsif nodo.has_children?
+        if nodo.children.first.has_link?
+          nodo.children.first.link
+        else
+          'root_path'
+        end
+      else
+        'root_path'
+      end
+      
+      Rails.application.routes.url_helpers.send(link, :nd => nodo.name)
+    end
+    
   end
 end
